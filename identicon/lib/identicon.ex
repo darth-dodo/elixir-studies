@@ -16,9 +16,14 @@ defmodule Identicon do
 
 
   def build_grid(%Identicon.Image{hex: hex_list} = image) do
-    hex_list
-    |> Enum.chunk(3)
-    |> Enum.map(&mirror_row/1) # & means passing reference to a func and /1 means using the function which has 1 arg (in case more than one func have the same name)
+    grid =
+      hex_list
+      |> Enum.chunk(3) # group the list into sub lists of 3 elements each
+      |> Enum.map(&mirror_row/1) # & means passing reference to a func and /1 means using the function which has 1 arg (in case more than one func have the same name)
+      |> List.flatten # convert the nested lists into a flat structure
+      |> Enum.with_index # add index to the array
+
+    %Identicon.Image{image | grid: grid}
   end
 
 
