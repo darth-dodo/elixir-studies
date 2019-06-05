@@ -11,6 +11,14 @@ defmodule Identicon do
     |> Enum.chunk(3)
   end
 
+  def mirror_row(row) do
+    # take out first and second
+    [first, second | _tail] = row
+
+    # append the elems
+    row ++ [second, first]
+  end
+
   def pick_color(image) do
     """
 
