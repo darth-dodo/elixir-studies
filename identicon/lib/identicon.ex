@@ -6,8 +6,28 @@ defmodule Identicon do
     |> build_grid
     |> filter_odd_squares
     |> build_pixel_map
+    |> draw_image
+    |> save_image(input) #although looks like we are passing it in as the first arg but it is the second
   end
 
+
+  def draw_image(%Identicon.Image{color: color, pixel_map: pixel_map}) do
+    image = :egd.create(250, 250)
+    fill_color = :egd.color(color)
+
+    Enum.each pixel_map, fn({start, stop}) ->
+      :egd.filledRectangle(image, start, stop, fill_color)
+    end
+
+    :egd.render(image)
+  end
+
+  def save_image(image_file, filename) do
+    File.write("#{filename}.png", image_file)
+  end
+
+
+  # gimme some value OUT of the first arg BUT gimme the first arg too!
   def build_pixel_map(%Identicon.Image{grid: grid} = image) do
     new_pixel_map = Enum.map grid, fn({_hex_value, index}) ->
       horizontal = rem(index, 5) * 50
