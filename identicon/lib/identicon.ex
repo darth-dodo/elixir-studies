@@ -3,6 +3,12 @@ defmodule Identicon do
     input
     |> hash_input
     |> pick_color
+    |> build_grid
+  end
+
+  def build_grid(%Identicon.Image{hex: hex_list} = image) do
+    hex_list
+    |> Enum.chunk(3)
   end
 
   def pick_color(image) do
@@ -16,8 +22,10 @@ defmodule Identicon do
     [red, green, blue]
     """
 
-    %Identicon.Image{hex: [red, green, blue | _tail]} = image
-    [red, green, blue]
+    %Identicon.Image{hex: [r, g, b | _tail]} = image
+    # adding the rgb to the struct
+    # immutability :p
+    %Identicon.Image{image | color: {r, g, b}}
   end
 
   def hash_input(input) do
