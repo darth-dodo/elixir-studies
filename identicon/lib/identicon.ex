@@ -2,6 +2,16 @@ defmodule Identicon do
   def main(input) do
     input
     |> hash_input
+    |> pick_color
+  end
+
+  def pick_color(image) do
+    # lhs == rhs. since `hex_list` is not defined, elixir attaches the value of the `image` hex list to our variable
+    %Identicon.Image{hex: hex_list} = image
+
+    # just focus on the first three values of the array, toss the others to the built in util called _tail 
+    [red, green, blue | _tail] = hex_list
+    [red, green, blue]
   end
 
   def hash_input(input) do
