@@ -6,11 +6,6 @@ defmodule Identicon do
     |> build_grid
   end
 
-  def build_grid(%Identicon.Image{hex: hex_list} = image) do
-    hex_list
-    |> Enum.chunk(3)
-  end
-
   def mirror_row(row) do
     # take out first and second
     [first, second | _tail] = row
@@ -18,6 +13,14 @@ defmodule Identicon do
     # append the elems
     row ++ [second, first]
   end
+
+
+  def build_grid(%Identicon.Image{hex: hex_list} = image) do
+    hex_list
+    |> Enum.chunk(3)
+    |> Enum.map(&mirror_row/1) # & means passing reference to a func and /1 means using the function which has 1 arg (in case more than one func have the same name)
+  end
+
 
   def pick_color(image) do
     """
